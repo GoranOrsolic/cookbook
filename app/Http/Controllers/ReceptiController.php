@@ -5,7 +5,7 @@ use App\Models\Sastojci;
 use App\Models\User;
 use App\Models\Recepti;
 use App\Models\Koraci;
-
+use App\Models\korSlike;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -55,6 +55,7 @@ class ReceptiController extends Controller
      */
     public function store(Request $request)
     {
+
         if ($request->hasFile('slika')) {
         $image = $request->file('slika');
        //  print_r($image);
@@ -108,18 +109,36 @@ class ReceptiController extends Controller
 
       Sastojci::insert($insert_data);
 
-        $korak = $_POST['koraci'];
+      
+        $description = $request->get('koraci'); 
+        $imag = $request->file('kor_sli'); 
+       
+        $destinationPath = base_path('storage/app/public');
 
-        for($count = 0; $count < count($korak); $count++)
-      {
-       $dat = array(
-        'korak' => $korak[$count],
-        'recept_id' => $recept_id['id'],
-       );
-       $insert_dat[] = $dat; 
-      }
+        for($i = 0; $i < count($description); ++$i) {
 
-      Koraci::insert($insert_dat);
+            
+            $descripti = $description[$i];
+            //$im = $imag[$i];
+             //dd($data);
+            $data = new Koraci;
+            $data->korak = $description[$i];
+            $data->recept_id = $recept_id['id'];
+
+         
+        if (isset($imag[$i])) {
+             $file = $imag[$i]; 
+
+        if ($file->isValid()) {
+                $extension = $file->getClientOriginalExtension();
+                $fileName = uniqid(). '.' .$extension; 
+                $file->move($destinationPath, $fileName); 
+
+                $data->slika = $fileName;
+            }}
+
+            $data->save();
+}
 
          return redirect()->route('add');
 
@@ -131,10 +150,13 @@ class ReceptiController extends Controller
      * @param  \App\Models\Recepti  $recepti
      * @return \Illuminate\Http\Response
      */
-    public function show(Recepti $recepti, $id)
+    public function show(Recepti $recepti, $id, korSlike $sli)
     {
         $recepti = Recepti::where('id' ,$id)->first();
-        return view('show', compact('recepti'));
+        // $ide = korSlike::all()->last()->korak_id;
+        // $sli = korSlike::where('korak_id' ,$ide)->latest()->get();
+        //dd($kor);
+        return view('show', compact('recepti', 'sli'));
     }
 
     /**

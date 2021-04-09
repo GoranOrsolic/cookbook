@@ -46,7 +46,7 @@ class UpdateController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, $recepti)
-    { 
+    {
 
 
     }
@@ -81,11 +81,11 @@ class UpdateController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
-        //Update  
+        //Update
         $recepti = Recepti::find($id);
 
         if ($request->hasFile('slika')) {
@@ -109,7 +109,7 @@ class UpdateController extends Controller
             $recepti->opis = $request->get('opis');
             $recepti->save();
         }
-        
+
 
         //Update sastojka
         //$naziv = $request->input('sast', []);
@@ -118,7 +118,7 @@ class UpdateController extends Controller
 
         $sas = $request->input('sastojci');
         //dd($sas);
-       
+
         if (isset($sas)) {
         foreach ($sas as $value => $k) {
             //dd($sas,$value,$k);
@@ -135,31 +135,34 @@ class UpdateController extends Controller
         }}
         //
 
-        //Update koraka 
+        //Update koraka
 
         $kor = Koraci::where('recept_id', $id)->pluck("id");
         //dd($kor);
         $korak = $request->input('koraci');
+        $imag = $request->file('kor_sli');
         //dd($korak);
         if (isset($korak)) {
         foreach ($korak as $value => $k) {
             //dd($sas,$value,$k);
             Koraci::where('id', $kor[$value])->update(['korak' => $k]);
         }}
-
-        foreach ($request->kor as $kor) {
-        if (isset($kor)) {
-            $detail = new Koraci();
-            $detail->korak = $kor;
-            $detail->recept_id = $id;
-            $detail->save();
+        $destinationPath = base_path('storage/app/public');
+        if (isset($imag)) {
+        foreach ($imag as $valu => $s) {
+             $extension = $s->getClientOriginalExtension();
+                $fileName = uniqid(). '.' .$extension; 
+                $s->move($destinationPath, $fileName); 
+            //dd($imag,$valu,$s);
+            Koraci::where('id', $kor[$valu])->update(['slika' => $fileName]);
         }}
+
         //
 
         return redirect()->route('recepti');
 
         }
-    
+
     /**
      * Remove the specified resource from storage.
      *

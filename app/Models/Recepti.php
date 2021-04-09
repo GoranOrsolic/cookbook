@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Sastojci;
 use App\Models\Koraci;
+use App\Models\korSlike;
 
 
 
@@ -41,4 +42,10 @@ class Recepti extends Model
         return $this->hasMany(Comment::class, 'recept_id')->latest(); 
 
     }
+
+    public function slike()
+    {
+        return $this->hasMany(korSlike::class, 'id');
+    }
+
 }

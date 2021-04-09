@@ -28,12 +28,13 @@
                 <div class="col">
                     <h2>Priprema:</h2>
                     <!-- {{$i = 1}} -->
-                    @foreach($recepti->korak as $kor)
+                   @forelse($recepti->korak as $kor)
                       <h5><p style="color: red; font-size: 30px; display: inline-block;">{{$i++}}.</p> {{ $kor->korak }}</h5>
-                      @if (($kor->slika)>0)
-                      <img src="{{ asset('storage/'.$kor->slika) }}" height="320px" width="640px" alt="" title=""></a>
+                      @if ($kor->slika > $i)
+                      <img src="{{ asset('storage/'.$kor->slika) }}" class="mb-3" height="320px" width="640px" alt="" title=""></a>
                       @endif
-                      @endforeach
+                      @empty
+                     @endforelse
                 </div>
                 </div>
                 <hr>

@@ -39,10 +39,14 @@
                         <br>
                         <br>
             </div>
-
+                    <!-- {{$i = 1}} -->
                 <div class="col">
                     @foreach($recepti->korak as $kor)
-                    <textarea class="form-control" type="text" rows="2" cols="30" name="koraci[]">{{ $kor->korak }}</textarea>
+                    <p style="color: red; font-size: 30px; display: inline-block;">{{$i++}}.</p><textarea class="form-control mt-2 mb-2" type="text" rows="2" cols="30" name="koraci[]">{{ $kor->korak }}</textarea>
+                    
+                    @if ($kor->slika > $i)
+                      <input class="p-2 w-full" type="file" name="kor_sli[]"><img src="{{ asset('storage/'.$kor->slika) }}" height="320px" width="640px" alt="" title=""></a></input><br>
+                      @endif
                     @endforeach
                     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
                     <div class="container2">

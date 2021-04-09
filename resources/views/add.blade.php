@@ -35,6 +35,7 @@
 
                 <div class="col">
                     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+                    <input name="imageAndDescriptionCount" type="hidden" value="">
                     <div class="container2">
                     <button class="add_form_file btn btn-outline-dark">Dodaj korake pripreme &nbsp; 
                     <span style="font-size:16px; font-weight:bold;">+ </span>
